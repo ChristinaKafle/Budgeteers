@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dashboard - Kalu B Pandey</title>
+  <style>
+    /* Color Theme */
+    :root {
+      --iphone-width: 430px;
+      --iphone-height: 932px;
+      --primary-color: #5E35B1;
+      --secondary-color: #7E57C2;
+      --text-dark: #263238;
+      --text-light: #78909C;
+      --border-color: #E0E0E0;
+      --card-bg: #FFFFFF;
+      --section-bg: #FAFAFA;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--section-bg);
+      color: var(--text-dark);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .iphone-container {
+      width: var(--iphone-width);
+      height: var(--iphone-height);
+      background-color: var(--card-bg);
+      position: relative;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 40px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+      padding: 60px 24px 80px;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      width: 30px;
+      height: 30px;
+      background-image: url('icons/Back.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+      transform: scale(1.1);
+    }
+
+    .profile-container {
+      background-color: #103a70;
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+      width: 365px;
+    }
+
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .profile-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #6c86aa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .profile-title {
+      font-size: 16px;
+      color: #cbd6e2;
+    }
+
+    .profile-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-title {
+      font-size: 13px;
+    }
+
+    .stat-value {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      margin-top: 20px;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+    }
+
+    .section-title::before {
+      display: inline-block;
+      width: 4px;
+      height: 18px;
+      background-color: var(--primary-color);
+      margin-right: 12px;
+      border-radius: 2px;
+    }
+
+    .popular-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .popular-item {
+      background-color: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popular-item img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 8px;
+    }
+
+    .popular-item span {
+      font-size: 15px;
+      font-weight: 600;
+      color: #103a70;
+    }
+
+    .popular-item:active {
+      transform: scale(0.98);
+    }
+
+    .sign-out-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #aab2be;
+      color: #103a70;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      box-shadow: none;
+    }
+
+    .sign-out-btn:active {
+      background-color: var(--secondary-color);
+    }
+
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-box {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      width: 280px;
+    }
+
+    .modal-box p {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: var(--text-dark);
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: space-around;
+      gap: 16px;
+    }
+
+    .modal-buttons button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .modal-yes {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .modal-no {
+      background-color: #ccc;
+      color: var(--text-dark);
+    }
+  </style>
+</head>
+<body>
+  <div class="iphone-container">
+    <button class="back-button" onclick="goBack()"></button>
+
+    <div class="profile-container">
+      <div class="profile-header">
+        <img src="icons/profile.png" alt="Profile" class="profile-image" />
+        <div class="profile-info">
+          <div class="profile-name">Kalu .B Pandey</div>
+          <div class="profile-title">Commander in Chief</div>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-item">
+          <div class="stat-title">Total income</div>
+          <div class="stat-value">XXX</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-title">Total spendings</div>
+          <div class="stat-value">XXX</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-title">Ratings</div>
+          <div class="stat-value">XXX</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Most popular</div>
+
+    <div class="popular-list">
+      <div class="popular-item">
+        <img src="icons/Shopping.png" alt="Shopping" />
+        <span>Shopping</span>
+      </div>
+      <div class="popular-item">
+        <img src="icons/Bills.png" alt="Bills" />
+        <span>Bills</span>
+      </div>
+      <div class="popular-item">
+        <img src="icons/Food.png" alt="Food" />
+        <span>Food</span>
+      </div>
+      <div class="popular-item">
+        <img src="icons/Others.png" alt="Others" />
+        <span>Others</span>
+      </div>
+      <div class="popular-item">
+        <img src="icons/Groceries.png" alt="Groceries" />
+        <span>Groceries</span>
+      </div>
+      <div class="popular-item">
+        <img src="icons/Transportation.png" alt="Transportation" />
+        <span>Transportation</span>
+      </div>
+    </div>
+
+    <button class="sign-out-btn">Sign out</button>
+
+    <!-- Custom Sign Out Modal -->
+    <div class="modal-overlay" id="signOutModal">
+      <div class="modal-box">
+        <p>Are you sure you want to sign out?</p>
+        <div class="modal-buttons">
+          <button class="modal-yes">Yes</button>
+          <button class="modal-no">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = "Home.html";
+    }
+
+    // Modal logic
+    const modal = document.getElementById("signOutModal");
+    const yesBtn = document.querySelector(".modal-yes");
+    const noBtn = document.querySelector(".modal-no");
+    const signOutBtn = document.querySelector(".sign-out-btn");
+
+    signOutBtn.addEventListener("click", () => {
+      modal.style.display = "flex";
+    });
+
+    yesBtn.addEventListener("click", () => {
+      window.location.href = "landingpage.html";
+    });
+
+    noBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    function resizeContainer() {
+      const container = document.querySelector(".iphone-container");
+      const aspectRatio = 430 / 932;
+      const scale = 0.9;
+      const maxHeight = window.innerHeight * scale;
+      const maxWidth = window.innerWidth * scale;
+
+      if (maxWidth / maxHeight > aspectRatio) {
+        container.style.height = `${maxHeight}px`;
+        container.style.width = `${maxHeight * aspectRatio}px`;
+      } else {
+        container.style.width = `${maxWidth}px`;
+        container.style.height = `${maxWidth / aspectRatio}px`;
+      }
+    }
+
+    resizeContainer();
+    window.addEventListener("resize", resizeContainer);
+  </script>
+</body>
+</html>

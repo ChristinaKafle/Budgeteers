@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Number</title>
+    <style>
+        /* Reset & Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Full Page Layout */
+        body {
+            background-color: CBD4E2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Main Container */
+        .container {
+            width: 430px;
+            height: 932px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Headings & Text */
+        h2 {
+            margin-top: 80px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        /* OTP Input Fields */
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .otp-inputs input {
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            border: 2px solid #A4B1C0;
+            border-radius: 10px;
+            background: #F7F9FC;
+            color: #333;
+            outline: none;
+        }
+
+        .otp-inputs input:focus {
+            border-color: #6A8597;
+            background: white;
+        }
+
+        /* Resend Code */
+        .resend {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .resend a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .resend a:hover {
+            text-decoration: underline;
+        }
+
+        /* Continue Button */
+        .continue-btn {
+            width: 100%;
+            background: #A4B1C0;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            margin: 20px 0;
+            transition: 0.3s ease-in-out;
+        }
+
+        .continue-btn:hover {
+            background: #8C9DA8;
+        }
+
+        /* Message Display */
+        .message {
+            background: #D9D9D9;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        /* Custom Mobile Keyboard */
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding-bottom: 30px;
+            width: 100%;
+            justify-items: center;
+        }
+
+        .keyboard button {
+            width: 100px;
+            height: 80px;
+            font-size: 28px;
+            background: #E6ECF2;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .keyboard button:hover {
+            background: #D1D9E0;
+        }
+
+        /* Last Row Adjustments */
+        .keyboard .zero {
+            grid-column: span 2;
+            width: 215px; /* Make '0' button wider */
+        }
+
+        .keyboard .delete {
+            background: #FF4B5C;
+            color: white;
+            font-size: 24px;
+        }
+
+        .keyboard .delete:hover {
+            background: #E03E4A;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button class="back-btn">&#8592;</button>
+    
+    <h2>Verify Your Number</h2>
+    <p>Enter the code we’ve sent to your mobile number</p>
+    
+    <!-- OTP Input Fields -->
+    <div class="otp-inputs">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+    </div>
+
+    <!-- Resend Link -->
+    <p class="resend">Didn’t get the code? <a href="#">Resend it</a></p>
+    
+    <!-- Continue Button -->
+    <button class="continue-btn">Continue</button>
+    
+    <!-- Message Preview -->
+    <div class="message">
+        <p><strong>From message:</strong></p>
+        <p>1234</p>
+    </div>
+
+    <!-- Custom Mobile Keyboard -->
+    <div class="keyboard">
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button class="zero">0</button>
+        <button class="delete">🗑️</button>
+    </div>
+</div>
+
+</body>
+</html>

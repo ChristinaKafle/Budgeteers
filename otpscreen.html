@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walletok - Send OTP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kay+Pho+Du&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Kay Pho Du', serif;
+    }
+
+    body {
+      background-color: #1e1e1e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 430px;
+      height: 932px;
+      background-color: #cdd6e4;
+      border-radius: 12px;
+      padding: 30px 20px;
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 15px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .back-btn img {
+      width: 28px;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 100px;
+      margin-bottom: 60px;
+    }
+
+    .logo-container img {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+    }
+
+    .input-group {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+
+    .input-group input {
+      background-color: #b0c2d4;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-size: 16px;
+      color: #0F366D;
+      font-weight: bold;
+      width: 80%;
+      text-align: center;
+      outline: none;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-group button {
+      background-color: #b0c2d4;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 50px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #0F366D;
+      cursor: pointer;
+    }
+
+    @media screen and (max-width: 430px) {
+      .container {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Back Button -->
+    <button class="back-btn">
+      <img src="icons/Back.png" alt="Back" />
+    </button>
+
+    <!-- Logo -->
+    <div class="logo-container">
+      <img src="icons/photo.png" alt="Walletok Logo" />
+    </div>
+
+    <!-- Mobile Input -->
+    <div class="input-group">
+      <input type="text" placeholder="Enter mobile number" />
+    </div>
+
+    <!-- Send OTP Button -->
+    <div class="btn-group">
+      <button>Send OTP</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,191 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: -2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2px;
+}
+
+/* Container */
+.container {
+    width: 430px;
+    min-height: 932px; 
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-btn {
+    width: 62px;
+    height: 62px;
+    border-radius: 35px;
+    border: none;
+    background-color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-btn img {
+    width: 35px;
+    height: 35px;
+}
+
+.balance-box {
+    width: 430px;
+    height: 220px;
+    background: url('icons/Rectangle\ 16.png') no-repeat center center;
+    background-size: cover;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.total {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.income-expense {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px 20px;
+    color: #f4f4f4;
+}
+
+.income, .expense {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+}
+
+.income {
+    color: rgb(255, 255, 255);
+}
+
+.expense {
+    color: rgb(255, 255, 255);
+}
+
+/* Toggle Buttons */
+.toggle-buttons {
+    display: flex;
+    margin: 20px 0;
+}
+
+.toggle-buttons button {
+    width: 50%;
+    height: 49px;
+    border: none;
+    background-color: #9AABC5;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.expense-btn {
+    background-color: ;
+    border-radius: 20px 0 0 20px;
+}
+
+.income-btn {
+    background-color: #ddd;
+    border-radius: 0 20px 20px 0;
+}
+
+/* Recent Activity */
+.recent-activity h3 {
+    margin-bottom: 10px;
+}
+
+.activity {
+    width: 386px;
+    height: 71px;
+    background-color: #9AABC5;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    margin-left: 4px;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.details {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.details .title {
+    font-weight: bold;
+    color: white; /* <<< Text color for "Bills", "Groceries", "Foods" */
+}
+
+.details .description {
+    color: white; /* <<< (Optional) If you want the description text white too */
+}
+
+.amount {
+    font-weight: bold;
+    color: red;
+}
+/* Footer */
+footer {
+    width: 100%;
+    height: 77px;
+    background-color: #9AABC5;
+    border-top: 2px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around; /* <<< changed to space-around for bigger gaps */
+    width: 100%;
+    padding: 0 40px; /* <<< added padding for even more gap */
+    position: relative;
+}
+
+.nav-icons img {
+    width: 40px; 
+    height: 40px;
+}
+
+.logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 30px; /* <<< dropped the logo lower (was 50px before) */
+}
+
+.logo img {
+    width: 90px; 
+    height: 90px;
+    margin-bottom: -10px;
+}

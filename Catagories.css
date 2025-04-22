@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 430px;
+    height: 932px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.back-button {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.header {
+    width: 382px;
+    height: 100px;
+    background-color: #B2BFD3;
+    color: #0F366D;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: bold;
+    margin: 40px auto;
+}
+
+.category {
+    width: 382px;
+    background-color: #B2BFD3;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 15px auto;
+    gap: 8px;
+}
+
+.category img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+/* Ensuring the text and input field are stacked */
+.category-text {
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    flex: 1;
+}
+
+.category span {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.category input {
+    width: 50%;
+    height: 29px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px; /* Ensures spacing between text and input */
+}
+
+.remarks {
+    width: 303px;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #161515;
+    color: #49a1c1;
+    background-color: #B2BFD3;
+    margin: 30px auto;
+    display: block;
+    padding: 8px;
+}
+
+.enter-button {
+    width: 150px;
+    height: 50px;
+    background-color: #B2BFD3;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    display: block;
+    margin: 50px auto;
+    cursor: pointer;
+}

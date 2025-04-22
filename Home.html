@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walletok App</title>
+    <link rel="stylesheet" href="Home.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Welcome, Alexa</h1>
+            <button class="notification-btn" onclick="window.location.href='notification.html'">
+                <img src="icons/Vector.png" alt="Notification">
+            </button>
+        </header>
+
+        <section class="balance-box">
+            <h2>Total Balance</h2>
+            <p class="total">$434.00</p>
+            <div class="income-expense">
+                <span class="income">Income <br> $2000.00</span>
+                <span class="divider"></span>
+                <span class="expense">Expense <br> $1566.00</span>
+            </div>
+        </section>
+
+        <div class="toggle-buttons">
+            <button class="expense-btn" onclick="window.location.href='Catagories.html'">Expense</button>
+            <button class="income-btn" onclick="window.location.href='calculator.html'">Income</button>
+        </div>
+
+        <section class="recent-activity">
+            <h3>Recent Activity</h3>
+            <div class="activity">
+                <img src="icons/Bills.png" class="icon" alt="Bills">
+                <div class="details">
+                    <p class="title">Bills</p>
+                    <p class="subtitle">Movie date</p>
+                </div>
+                <div class="amount-date">
+                    <span class="amount">$20.00<br></span>
+                    <span class="date">March 28, 2025</span>
+                </div>
+            </div>
+
+            <div class="activity">
+                <img src="icons/Groceries.png" class="icon" alt="Groceries">
+                <div class="details">
+                    <p class="title">Groceries</p>
+                    <p class="subtitle">Vegetables</p>
+                </div>
+                <div class="amount-date">
+                    <span class="amount">$40.00<br></span>
+                    <span class="date">March 27, 2025</span>
+                </div>
+            </div>
+
+            <div class="activity">
+                <img src="icons/Food.png" class="icon" alt="Food">
+                <div class="details">
+                    <p class="title">Foods</p>
+                    <p class="subtitle">Snacks</p>
+                </div>
+                <div class="amount-date">
+                    <span class="amount">$10.00<br></span>
+                    <span class="date">March 26, 2025</span>
+                </div>
+            </div>
+
+            <a href="#" class="view-all">View All</a>
+        </section>
+
+        <footer>
+            <div class="nav-icons">
+                <img src="icons/mage_goals-fill.png" alt="Goals" onclick="window.location.href='Goals.html'" style="cursor:pointer;">
+                <img src="icons/menu.png" alt="Menu" onclick="window.location.href='table.html'" style="cursor:pointer;">
+                
+                <div class="logo">
+                    <img src="icons/Logo.png" alt="Walletok Logo">
+                </div>
+                
+                <img src="icons/Growth Graph.png" alt="Stats" onclick="window.location.href='diagram.html'" style="cursor:pointer;">
+                <img src="icons/Profile.png" alt="Profile" onclick="window.location.href='profile.html'" style="cursor:pointer;">
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

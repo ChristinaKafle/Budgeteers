@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Financial Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #0F366D;
+            --secondary-color: #27497C;
+            --text-dark: #3D5C8A;
+            --text-light: #536F99;
+            --border-color: #B2BFD3;
+            --card-bg: #FFFFFF;
+            --section-bg: #FAFAFA;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--section-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden; /* Prevent body scrolling */
+        }
+
+        .app-container {
+            width: 393px;
+            height: 852px;
+            background-color: var(--card-bg);
+            position: relative;
+            border-radius: 40px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.2);
+            padding: 60px 24px 80px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Prevent container scrolling */
+        }
+        
+        .back-button {
+            width: 30px;
+            height: 30px;
+            background-image: url('icons/Back.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 24px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .time-periods {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .time-period {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: var(--section-bg);
+            color: var(--text-dark);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .time-period.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .chart-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+            -ms-overflow-style: none; /* Hide scrollbar IE/Edge */
+        }
+
+        .chart-container::-webkit-scrollbar {
+            display: none; /* Hide scrollbar Chrome/Safari */
+        }
+
+        .chart-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <button class="back-button" onclick="goBack()"></button>
+        <h1>Visualization</h1>
+        
+        <div class="time-periods">
+            <div class="time-period active" onclick="showPeriod('yearly')">Yearly</div>
+            <div class="time-period" onclick="showPeriod('monthly')">Monthly</div>
+            <div class="time-period" onclick="showPeriod('daily')">Daily</div>
+        </div>
+        
+        <div class="chart-container" id="chartContainer">
+            <!-- Yearly Charts -->
+            <div class="period-section" id="yearly">
+                <div class="chart-card">
+                    <div class="chart-title">Income vs Expenses (Yearly)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="yearlyBarChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-title">Expense Distribution (Yearly)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="yearlyPieChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-title">Monthly Trend (Yearly)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="yearlyHistogram"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Monthly Charts (Hidden by default) -->
+            <div class="period-section" id="monthly" style="display: none;">
+                <div class="chart-card">
+                    <div class="chart-title">Income vs Expenses (Monthly)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="monthlyBarChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-title">Expense Distribution (Monthly)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="monthlyPieChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-title">Daily Trend (Monthly)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="monthlyHistogram"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Daily Charts (Hidden by default) -->
+            <div class="period-section" id="daily" style="display: none;">
+                <div class="chart-card">
+                    <div class="chart-title">Income vs Expenses (Daily)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="dailyBarChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-title">Expense Distribution (Daily)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="dailyPieChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-title">Hourly Trend (Daily)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="dailyHistogram"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Back button functionality
+        function goBack() {
+            window.location.href = "Home.html"; // Link to your table page
+        }
+
+        // Time period switching
+        function showPeriod(period) {
+            document.querySelectorAll('.period-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.querySelectorAll('.time-period').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(period).style.display = 'block';
+            document.querySelector(`.time-period[onclick="showPeriod('${period}')"]`).classList.add('active');
+        }
+
+        // Data extracted from your table example
+        const tableData = [
+            { date: '2025-03-01', income: 5000, shopping: 200, bills: 100, food: 150, groceries: 250, transport: 100, others: 50 },
+            { date: '2025-03-02', income: 0, shopping: 0, bills: 50, food: 120, groceries: 200, transport: 60, others: 30 },
+            { date: '2025-03-03', income: 0, shopping: 150, bills: 0, food: 80, groceries: 0, transport: 70, others: 20 },
+            { date: '2025-03-04', income: 0, shopping: 0, bills: 120, food: 100, groceries: 130, transport: 90, others: 0 },
+            { date: '2025-03-05', income: 0, shopping: 0, bills: 0, food: 130, groceries: 100, transport: 50, others: 40 }
+        ];
+
+        // Process data for visualization
+        const financialData = {
+            yearly: {
+                labels: ['Mar'], // Only March in our data
+                income: [tableData.reduce((sum, row) => sum + row.income, 0)],
+                expenses: [tableData.reduce((sum, row) => sum + (row.shopping + row.bills + row.food + row.groceries + row.transport + row.others), 0)],
+                categories: ['Shopping', 'Bills', 'Food', 'Groceries', 'Transport', 'Others'],
+                categoryValues: [
+                    tableData.reduce((sum, row) => sum + row.shopping, 0),
+                    tableData.reduce((sum, row) => sum + row.bills, 0),
+                    tableData.reduce((sum, row) => sum + row.food, 0),
+                    tableData.reduce((sum, row) => sum + row.groceries, 0),
+                    tableData.reduce((sum, row) => sum + row.transport, 0),
+                    tableData.reduce((sum, row) => sum + row.others, 0)
+                ]
+            },
+            monthly: {
+                labels: tableData.map(row => row.date.split('-')[2]), // Extract day
+                income: tableData.map(row => row.income),
+                expenses: tableData.map(row => row.shopping + row.bills + row.food + row.groceries + row.transport + row.others),
+                categories: ['Shopping', 'Bills', 'Food', 'Groceries', 'Transport', 'Others'],
+                categoryValues: [
+                    tableData.reduce((sum, row) => sum + row.shopping, 0),
+                    tableData.reduce((sum, row) => sum + row.bills, 0),
+                    tableData.reduce((sum, row) => sum + row.food, 0),
+                    tableData.reduce((sum, row) => sum + row.groceries, 0),
+                    tableData.reduce((sum, row) => sum + row.transport, 0),
+                    tableData.reduce((sum, row) => sum + row.others, 0)
+                ]
+            },
+            daily: {
+                labels: ['6AM', '9AM', '12PM', '3PM', '6PM', '9PM'],
+                income: [0, 0, 0, 0, 0, 0], // No hourly income data
+                expenses: [50, 120, 200, 150, 100, 80], // Sample hourly expenses
+                categories: ['Shopping', 'Bills', 'Food', 'Groceries', 'Transport', 'Others'],
+                categoryValues: [350, 270, 580, 680, 320, 140] // Sample distribution
+            }
+        };
+
+        // Initialize charts when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Yearly Charts
+            createBarChart('yearlyBarChart', financialData.yearly, 'Income vs Expenses');
+            createPieChart('yearlyPieChart', financialData.yearly);
+            createHistogram('yearlyHistogram', financialData.yearly, 'Monthly Trend');
+            
+            // Monthly Charts
+            createBarChart('monthlyBarChart', financialData.monthly, 'Income vs Expenses');
+            createPieChart('monthlyPieChart', financialData.monthly);
+            createHistogram('monthlyHistogram', financialData.monthly, 'Daily Trend');
+            
+            // Daily Charts
+            createBarChart('dailyBarChart', financialData.daily, 'Income vs Expenses');
+            createPieChart('dailyPieChart', financialData.daily);
+            createHistogram('dailyHistogram', financialData.daily, 'Hourly Trend');
+        });
+
+    // Chart creation functions
+function createBarChart(canvasId, data, title) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.labels,
+            datasets: [
+                {
+                    label: 'Income',
+                    data: data.income,
+                    backgroundColor: '#0F366D', // primary-color
+                    borderColor: '#0F366D',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Expenses',
+                    data: data.expenses,
+                    backgroundColor: '#27497C', // secondary-color
+                    borderColor: '#27497C',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: '#3D5C8A' // text-dark
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#536F99' // text-light
+                    },
+                    grid: {
+                        color: '#B2BFD3' // border-color
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#536F99'
+                    },
+                    grid: {
+                        color: '#B2BFD3'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createPieChart(canvasId, data) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: data.categories,
+            datasets: [{
+                data: data.categoryValues,
+                backgroundColor: [
+                    '#0F366D',
+                    '#27497C',
+                    '#3D5C8A',
+                    '#536F99',
+                    '#B2BFD3',
+                    '#FAFAFA'
+                ],
+                borderWidth: 1,
+                borderColor: '#FFFFFF' // optional, matches card-bg
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        color: '#3D5C8A'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createHistogram(canvasId, data, title) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                label: 'Expenses',
+                data: data.expenses,
+                backgroundColor: 'rgba(15, 54, 109, 0.2)', // primary-color with transparency
+                borderColor: '#0F366D',
+                borderWidth: 2,
+                tension: 0.1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#3D5C8A'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#536F99'
+                    },
+                    grid: {
+                        color: '#B2BFD3'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#536F99'
+                    },
+                    grid: {
+                        color: '#B2BFD3'
+                    }
+                }
+            }
+        }
+    });
+}
+
+    </script>
+</body>
+</html>
