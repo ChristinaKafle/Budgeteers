@@ -18,11 +18,13 @@ body {
     width: 430px;
     height: 932px;
     border: 1px solid blue;
+    position: relative;
 }
 
 header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 10px;
 }
 
@@ -39,13 +41,19 @@ header {
 h1 {
     font-size: 20px;
     margin-left: 10px;
+    flex: 1;
+}
+
+.date {
+    font-size: 14px;
+    font-weight: bold;
 }
 
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 100px;
 }
 
 .large-box {
@@ -56,7 +64,7 @@ main {
 }
 
 .income-label {
-    margin-top: 10px;
+    margin-top: 20px;
     font-size: 14px;
     font-weight: bold;
 }
@@ -66,6 +74,23 @@ main {
     height: 34px;
     background: #B2BFD3;
     border-radius: 10px;
+    margin-top: 5px;
+}
+
+/* New Date Input Label & Field */
+.date-label {
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.date-input {
+    width: 303px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    font-size: 14px;
     margin-top: 5px;
 }
 
@@ -114,6 +139,7 @@ main {
     border-radius: 20px;
     transition: background 0.2s ease;
 }
+
 #equal:active {
     background: #6E5BFF;
 }
