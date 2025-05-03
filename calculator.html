@@ -9,13 +9,18 @@
 <body>
     <div class="container">
         <header>
-            <button class="back-button" onclick="window.location.href='Home.html'">&lt;</button>
+            <button class="back-button">&lt;</button>
             <h1>Income</h1>
+            <div class="date">Apr 25, 2025</div>
         </header>
         <main>
             <div class="large-box"></div>
             <label class="income-label">Source of Income</label>
             <div class="small-box"></div>
+
+            <!-- Manual Date Input -->
+            <label class="date-label" for="manual-date">Enter Date</label>
+            <input type="date" id="manual-date" class="date-input">
         </main>
         <section class="calculator">
             <div class="grid">
@@ -30,12 +35,13 @@
                 <button class="key">7</button>
                 <button class="key">8</button>
                 <button class="key">9</button>
-                <button id="equal">=</button>
+                <button id="equal"><b>Enter</b></button>
                 <button class="key">0</button>
                 <button class="key">/</button>
                 <button class="key">*</button>
             </div>
         </section>
     </div>
+    <script src="calculator.js"></script>
 </body>
 </html>
