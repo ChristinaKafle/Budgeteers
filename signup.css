@@ -108,3 +108,35 @@ input::placeholder {
     background-color: #1A202C;
     transform: scale(1.05);
 }
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.tooltip {
+    position: absolute;
+    top: 110%; /* Push it slightly below the input */
+    left: 0;
+    width: 100%;
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 5px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 1;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+
+    pointer-events: none; /* Prevent blocking hover/focus */
+}
+
+
+/* Show on hover or focus */
+.password-container:hover .tooltip,
+.password-container input:focus + .tooltip {
+    opacity: 1;
+    visibility: visible;
+}
