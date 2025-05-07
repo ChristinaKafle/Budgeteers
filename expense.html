@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=430, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Expense Categories</title>
+  <link rel="stylesheet" href="expense.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert2 -->
+
+  <script>
+    window.onload = function() {
+      const form = document.querySelector('form');
+      const amountInputs = document.querySelectorAll('input[type="text"]');
+      const remarkInputs = document.querySelectorAll('textarea');
+      const dateInput = document.getElementById('manual-date');
+
+      // Redirect on back button click
+      const backButton = document.querySelector('.back-button');
+      backButton.addEventListener('click', function() {
+        window.location.href = 'Home.php';
+      });
+
+      // Form submit validation
+      form.addEventListener('submit', function(event) {
+        let validForm = true;
+
+        // Check if at least one amount and remark are filled
+        let atLeastOneFilled = false;
+        let allValidAmount = true;
+
+        amountInputs.forEach((input, index) => {
+          const amount = input.value.trim();
+          const remark = remarkInputs[index].value.trim();
+
+          // Validate that the amount is a positive number
+          if (amount !== "" && (!isNaN(amount) && parseFloat(amount) > 0) && remark !== "") {
+            atLeastOneFilled = true;
+          } else if (amount !== "" && (isNaN(amount) || parseFloat(amount) <= 0)) {
+            allValidAmount = false;
+          }
+        });
+
+        if (!atLeastOneFilled) {
+          validForm = false;
+          Swal.fire({
+            title: 'Error!',
+            text: 'Please fill in at least one expense amount and its remark.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+
+        if (!allValidAmount) {
+          validForm = false;
+          Swal.fire({
+            title: 'Error!',
+            text: 'Please enter a valid positive number for all amounts.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+
+        if (dateInput.value.trim() === "") {
+          validForm = false;
+          Swal.fire({
+            title: 'Error!',
+            text: 'Please select a date.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+
+        if (!validForm) {
+          event.preventDefault(); // Prevent form submission
+        } else {
+          // Make the form submission via AJAX
+          event.preventDefault(); // Prevent default form submission
+          const formData = new FormData(form);
+
+          fetch('expense.php', {
+  method: 'POST',
+  body: formData
+})
+.then(response => response.json())
+.then(data => {
+  if (data.status === "success") {
+    Swal.fire({
+      title: 'Success!',
+      text: data.message,
+      icon: 'success',
+      confirmButtonText: 'OK'
+    }).then(() => {
+      form.reset(); // Clear form fields
+    });
+  } else {
+    Swal.fire({
+      title: 'Error!',
+      text: data.message,
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
+  }
+})
+
+          .catch(error => {
+            Swal.fire({
+              title: 'Error!',
+              text: 'There was an issue with the request.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
+          });
+        }
+      });
+    };
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Back Button with Image -->
+    <button class="back-button">
+      <img src="icons/Back.png" alt="Back" style="width: 24px; height: 24px;">
+    </button>
+
+    <div class="header">Expense Categories</div>
+
+    <!-- Start of Form -->
+    <form action="expense.php" method="POST">
+  
+      <div class="category">
+        <img src="icons/Shopping.png" alt="Shopping">
+        <input type="text" name="shopping" placeholder="Shopping Amount">
+        <textarea name="shopping_remarks" placeholder="Remark for shopping..."></textarea>
+      </div>
+    
+      <div class="category">
+        <img src="icons/Bills.png" alt="Bill">
+        <input type="text" name="bills" placeholder="Bill Amount">
+        <textarea name="bills_remarks" placeholder="Remark for bills..."></textarea>
+      </div>
+    
+      <div class="category">
+        <img src="icons/Food.png" alt="Foods">
+        <input type="text" name="food" placeholder="Foods Amount">
+        <textarea name="food_remarks" placeholder="Remark for food..."></textarea>
+      </div>
+    
+      <div class="category">
+        <img src="icons/Investment.png" alt="Investment">
+        <input type="text" name="investment" placeholder="Investment Amount">
+        <textarea name="investment_remarks" placeholder="Remark for investment..."></textarea>
+      </div>
+    
+      <div class="category">
+        <img src="icons/Transportation.png" alt="Transportation">
+        <input type="text" name="transportation" placeholder="Transportation Amount">
+        <textarea name="transportation_remarks" placeholder="Remark for transportation..."></textarea>
+      </div>
+    
+      <div class="category">
+        <img src="icons/Others.png" alt="Others">
+        <input type="text" name="others" placeholder="Others Amount">
+        <textarea name="others_remarks" placeholder="Remark for others..."></textarea>
+      </div>
+    
+      <label for="manual-date" class="date-label">Select Date</label>
+      <input type="date" id="manual-date" name="date" class="date-input">
+    
+      <button type="submit" class="enter-button">Enter</button>
+    
+    </form>
+    
+    <!-- End of Form -->
+
+  </div>
+</body>
+</html>

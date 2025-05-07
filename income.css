@@ -1,0 +1,159 @@
+* {
+    margin: 0;
+    padding: 0.1px;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', serif;
+    color: #0F366D;
+}
+
+body {
+    width: 430px;
+    height: 932px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 430px;
+    height: 932px;
+    border: 1px solid rgb(133, 133, 190);
+    position: relative;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.back-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid black;
+    background: white;
+    font-size: 20px;
+    cursor: pointer;
+    color: #0F366D;
+}
+
+h1 {
+    font-family: 'Times New Roman', serif;
+    font-size: 28px; /* Increased size */
+    font-weight: bold;
+    color: #0F366D;
+    margin-left: 10px;
+    flex: 1;
+    text-align: center; /* Optional: center the text */
+}
+
+
+.date {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.large-box {
+    width: 310px;
+    height: 92px;
+    background: #B2BFD3;
+    border-radius: 10px;
+}
+
+.income-label {
+    margin-top: 20px;
+    font-size: 18px; /* Increased size */
+    font-weight: bold;
+    text-align: center; /* Centered */
+    width: 100%;
+}
+
+.small-box {
+    width: 303px;
+    height: 34px;
+    background: #B2BFD3;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+/* New Date Input Label & Field */
+.date-label {
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #0F366D;
+}
+
+.date-input {
+    width: 303px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-top: 5px;
+    color: #0F366D;
+    font-family: 'Times New Roman', serif;
+}
+
+.calculator {
+    width: 430px;
+    height: 466px;
+    background: #B2BFD3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    padding: 10px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 90px);
+    grid-template-rows: repeat(4, 90px);
+    grid-gap: 10px;
+}
+
+.key {
+    width: 90px;
+    height: 90px;
+    background: #ffffff;
+    border-radius: 20px;
+    border: none;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: #0F366D;
+    font-family: 'Times New Roman', serif;
+}
+
+.key:active {
+    background: #B2BFD3;
+}
+
+#equal {
+    height: 198px;
+    grid-row: span 2;
+    border-radius: 20px;
+    transition: background 0.2s ease;
+}
+
+#equal:active {
+    background: #B2BFD3;
+}

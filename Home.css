@@ -1,0 +1,262 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', serif;
+    color: #0F366D;
+}
+
+body {
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2px;
+}
+
+.container {
+    width: 430px;
+    min-height: 100vh;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.notification-btn {
+    width: 62px;
+    height: 62px;
+    border-radius: 35px;
+    border: none;
+    background-color:#CBD4E2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.notification-btn:hover {
+    transform: scale(1.05);
+}
+
+.notification-btn img {
+    width: 40px;
+    height: 40px;
+}
+
+.balance-box {
+    width: 100%;
+    max-width: 386px;
+    margin: 0 auto;
+    padding: 30px 15px 40px;
+    background: url('icons/Rectangle 16.png') no-repeat center center;
+    background-size: cover;
+    border-radius: 20px;
+    text-align: center;
+    min-height: 200px; 
+}
+
+.total {
+    font-size: 38px; 
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.balance-note {
+    font-size: 14px;
+    color: #dc3545;
+    margin-top: 2px;
+}
+
+.income-expense {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding: 10px 20px;
+}
+
+.income, .expense {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.income {
+    color: #28a745;
+}
+
+.expense {
+    color: #dc3545;
+}
+
+/* Toggle Buttons */
+.toggle-buttons {
+    display: flex;
+    margin: 20px 0;
+    gap: 10px;
+    justify-content: center;
+}
+
+.toggle-buttons button {
+    flex: 1;
+    max-width: 160px;
+    padding: 10px 20px;
+    height: auto;
+    border: 2px solid #0F366D;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #9AABC5;
+    color: #0F366D;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    box-shadow: 0 2px 5px rgba(15, 54, 109, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.toggle-buttons button:hover {
+    background-color: #8292af;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Active/selected button effect */
+.toggle-buttons button.active {
+    background-color: #0F366D;
+    color: #ffffff;
+    border-color: #0F366D;
+    box-shadow: 0 6px 16px rgba(15, 54, 109, 0.5);
+}
+
+/* Click animation (optional ripple feel) */
+.toggle-buttons button:active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    animation: ripple 0.4s ease-out forwards;
+}
+
+.expense-btn {
+    border-radius: 25px 0 0 25px;
+}
+
+.income-btn {
+    border-radius: 0 25px 25px 0;
+}
+
+/* Recent Activity */
+.recent-activity {
+    padding: 0 20px;
+}
+
+.recent-activity h3 {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.activity {
+    width: 386px;
+    height: 71px;
+    background-color: #9AABC5;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 30px;
+    margin-left: 4px;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.details {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.details .title {
+    font-weight: bold;
+    color: white;
+}
+
+.details .description {
+    color: white;
+}
+
+.amount {
+    font-weight: bold;
+    color: red;
+}
+
+/* Footer */
+footer {
+    width: 100%;
+    height: 85px;
+    background-color: #9AABC5;
+    border-top: 2px solid #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 500px;
+    padding: 0 30px;
+    position: relative;
+}
+
+.nav-icons img {
+    width: 42px;
+    height: 42px;
+    transition: transform 0.2s ease;
+}
+
+.nav-icons img:hover {
+    transform: scale(1.1);
+}
+
+.logo {
+    position: relative;
+    top: -25px;
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

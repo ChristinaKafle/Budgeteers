@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction Charts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Times New Roman', serif; /* Change font to Times New Roman */
+    color: #0F366D; /* Change text color to #0F366D */
+}
+
+.phone-frame {
+    width: 430px;
+    height: 932px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    position: relative;
+    padding: 20px 15px 50px;
+    box-sizing: border-box;
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 30px;
+    height: 30px;
+    background: url('icons/Back.png') no-repeat center;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: bold; /* Make the title bold */
+    color: #0F366D; /* Text color changed */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px 0 30px;
+}
+
+.chart-button {
+    background-color: #6A83A7;
+    color: white;
+    border: none;
+    border-radius: 12px; /* Make the buttons more rounded */
+    padding: 12px 18px; /* Increase padding for a larger button */
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, font-weight 0.3s, transform 0.2s ease; /* Added transition for effects */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added box-shadow */
+}
+
+.chart-button.active {
+    background-color: #4d648d;
+    font-weight: bold;
+}
+
+.chart-button:hover {
+    background-color: #5a728a; /* Change color when hovered */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.chart-button:active {
+    transform: scale(0.98); /* Button scales down on click */
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold; /* Make the subtitle bold */
+}
+
+canvas {
+    width: 100% !important;
+    max-height: 250px;
+    margin-bottom: 30px;
+}
+
+.chart-section {
+    display: none;
+}
+
+.chart-section.active {
+    display: block;
+}
+
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <button class="back-btn" onclick="window.location.href='Home.php';"></button>
+
+        <h1>Visualization</h1>
+
+        <div class="button-container">
+            <button class="chart-button" id="yearlyBtn" onclick="goToView('yearly')">Yearly</button>
+            <button class="chart-button" id="monthlyBtn" onclick="goToView('monthly')">Monthly</button>
+            <button class="chart-button" id="dailyBtn" onclick="goToView('daily')">Daily</button>
+        </div>
+
+        <div id="yearlySection" class="chart-section">
+            <h2>Yearly Pie Chart: Income vs Expense</h2>
+            <canvas id="yearlyPieChart"></canvas>
+        
+            <h2>Yearly Bar Chart: Expenses by Category</h2>
+            <canvas id="yearlyBarChart"></canvas>
+        
+            <h2>Yearly Expense Histogram</h2>
+            <canvas id="yearlyHistChart"></canvas>
+        </div>
+        
+        <div id="monthlySection" class="chart-section">
+            <h2>Monthly Pie Chart: Income vs Expense</h2>
+            <canvas id="monthlyPieChart"></canvas>
+        
+            <h2>Monthly Bar Chart: Expenses by Category</h2>
+            <canvas id="monthlyBarChart"></canvas>
+        
+            <h2>Monthly Expense Histogram</h2>
+            <canvas id="monthlyHistChart"></canvas>
+        </div>
+        
+        <div id="dailySection" class="chart-section">
+            <h2>Daily Pie Chart: Income vs Expense</h2>
+            <canvas id="dailyPieChart"></canvas>
+        
+            <h2>Daily Bar Chart: Expenses by Category</h2>
+            <canvas id="dailyBarChart"></canvas>
+        
+            <h2>Daily Expense Histogram</h2>
+            <canvas id="dailyHistChart"></canvas>
+        </div>
+        
+    </div>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function goToView(view) {
+            window.location.href = `diagram.html?view=${view}`;
+        }
+
+        function activateView(view) {
+            const views = ['yearly', 'monthly', 'daily'];
+            views.forEach(v => {
+                document.getElementById(v + 'Section').classList.remove('active');
+                document.getElementById(v + 'Btn').classList.remove('active');
+            });
+
+            if (views.includes(view)) {
+                document.getElementById(view + 'Section').classList.add('active');
+                document.getElementById(view + 'Btn').classList.add('active');
+            } else {
+                document.getElementById('weeklySection').classList.add('active');
+                document.getElementById('weeklyBtn').classList.add('active');
+            }
+        }
+
+        // On page load
+        const currentView = getQueryParam('view') || 'daily';
+        activateView(currentView);
+    </script>
+
+    <script src="charts.js"></script>
+</body>
+</html>

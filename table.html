@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Financial Records</title>
+    <style>
+       :root {
+            --primary-color: #0F366D;
+            --secondary-color: #27497C;
+            --text-dark: #FFFFFF;
+            --text-light: #FFFFFF;
+            --border-color: #B2BFD3;
+            --card-bg: #FFFFFF;
+            --section-bg: #FAFAFA;
+            --table-header: #3D5C8A;
+            --table-row-even: #3D5C8A;
+            --table-row-odd: #6A83A7;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: Kay Pho Du;
+        }
+
+        body {
+            background-color: var(--section-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            
+        }
+
+        .app-container {
+            width: 393px;
+            height: 852px;
+            background-color: var(--card-bg);
+            position: relative;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 40px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.2);
+            padding: 60px 24px 80px;
+        }
+        
+        /* Back Button */
+        .back-button {
+            width: 30px;
+            height: 30px;
+            background-image: url('icons/Back.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 24px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            transform: scale(1.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px; /* Ensures table is wide enough to scroll */
+        }
+
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        th {
+            background-color: var(--table-header);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:nth-child(odd) {
+            background-color: var(--table-row-odd);
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--table-row-even);
+        }
+
+        tr {
+            visibility: visible; /* Ensure rows are visible */
+        }
+
+        tr:nth-child(odd),
+        tr:nth-child(even) {
+            display: table-row !important; /* Ensure rows are rendered */
+        }
+
+        tr:hover {
+            background-color: #B2BFD3;
+        }
+
+        .remarks-col {
+            min-width: 120px;
+        }
+
+        /* Scrollbar styling */
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: var(--section-bg);
+            border-radius: 3px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <button class="back-button" onclick="goBack()"></button>
+        <h1>Data Records</h1>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Income</th>
+                        <th>Shopping</th>
+                        <th>Bills</th>
+                        <th>Food</th>
+                        <th>Groceries</th>
+                        <th>Transport</th>
+                        <th>Others</th>
+                        <th class="remarks-col">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Dynamic rows will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    function goBack() {
+        window.location.href = "Home.php"; 
+    }
+
+    // Fetch data from table.php and populate the table
+    fetch('table.php')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // Log to see all fetched data
+        const tableBody = document.getElementById('table-body');
+        if (data.error) {
+            tableBody.innerHTML = `<tr><td colspan="9">${data.error}</td></tr>`;
+            return;
+        }
+
+        // Loop through the data array to create rows
+        data.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row.date}</td>
+                <td>${row.income}</td>
+                <td>${row.shopping}</td>
+                <td>${row.bills}</td>
+                <td>${row.food}</td>
+                <td>${row.groceries}</td>
+                <td>${row.transport}</td>
+                <td>${row.others}</td>
+                <td>${row.remarks}</td>
+            `;
+            tableBody.appendChild(tr);
+        });
+    })
+    .catch(error => {
+        console.error('Error loading data:', error);
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = '<tr><td colspan="9">Failed to load data</td></tr>';
+    });
+
+</script>
+
+</body>
+</html>

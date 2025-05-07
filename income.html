@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=430, height=932, initial-scale=1.0">
+    <title>Income Layout</title>
+    <link rel="stylesheet" href="income.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button class="back-button">&lt;</button>
+            <h1>Income</h1>
+            <div class="date" id="current-date">Apr 25, 2025</div>
+        </header>
+
+        <main>
+            <div class="large-box" id="display">0</div>
+
+            <!-- Source of Income Input -->
+            <label class="income-label" for="source">Source of Income</label>
+            <input type="text" id="source" class="small-box" placeholder="Enter source">
+
+            <!-- Date Input -->
+            <label class="date-label" for="manual-date">Enter Date</label>
+            <input type="date" id="manual-date" class="date-input">
+        </main>
+
+        <section class="calculator">
+            <div class="grid">
+                <button type="button" class="key">1</button>
+                <button type="button" class="key">2</button>
+                <button type="button" class="key">3</button>
+                <button type="button" class="key" id="backspace">⌫</button>
+
+                <button type="button" class="key">4</button>
+                <button type="button" class="key">5</button>
+                <button type="button" class="key">6</button>
+                <button type="button" class="key" id="clear">🗑</button>
+
+                <button type="button" class="key">7</button>
+                <button type="button" class="key">8</button>
+                <button type="button" class="key">9</button>
+                <button id="equal" type="button"><b>Enter</b></button>
+
+                <button type="button" class="key">0</button>
+                <button type="button" class="key">/</button>
+                <button type="button" class="key">*</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const keys = document.querySelectorAll('.key');
+        const equalBtn = document.getElementById('equal');
+        const display = document.getElementById('display');
+        const sourceInput = document.getElementById('source');
+        const dateInput = document.getElementById('manual-date');
+        let input = "";
+
+        function updateDisplay(value) {
+            display.textContent = value || "0";
+        }
+
+        keys.forEach(key => {
+            if (key.id !== 'backspace' && key.id !== 'clear') {
+                key.addEventListener('click', () => {
+                    input += key.textContent;
+                    updateDisplay(input);
+                });
+            }
+        });
+
+        document.getElementById('backspace').addEventListener('click', () => {
+            input = input.slice(0, -1);
+            updateDisplay(input);
+        });
+
+        document.getElementById('clear').addEventListener('click', () => {
+            input = "";
+            updateDisplay(input);
+        });
+
+        equalBtn.addEventListener('click', async () => {
+            const amount = parseFloat(input);
+            const source = sourceInput.value.trim();
+            const date = dateInput.value;
+
+            if (isNaN(amount) || amount <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Invalid Amount',
+                    text: 'Please enter a valid income amount greater than zero.',
+                });
+                return;
+            }
+
+            if (source === "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Missing Source',
+                    text: 'Please enter the source of income.',
+                });
+                return;
+            }
+
+            if (date === "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Missing Date',
+                    text: 'Please select a date.',
+                });
+                return;
+            }
+
+            try {
+                const response = await fetch('income.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `amount=${encodeURIComponent(amount)}&source=${encodeURIComponent(source)}&income_date=${encodeURIComponent(date)}`
+                });
+
+                const result = await response.text();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Income Saved',
+                    text: result,
+                });
+
+                input = "";
+                updateDisplay(0);
+                sourceInput.value = "";
+                dateInput.value = "";
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Submission Failed',
+                    text: 'Error saving income.',
+                });
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const dateDiv = document.getElementById("current-date");
+            const today = new Date();
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            dateDiv.textContent = today.toLocaleDateString('en-US', options);
+        });
+
+        dateInput.addEventListener('change', () => {
+            const selectedDate = new Date(dateInput.value);
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            document.getElementById("current-date").textContent = selectedDate.toLocaleDateString('en-US', options);
+        });
+        document.querySelector('.back-button').addEventListener('click', () => {
+    window.location.href = 'Home.php';
+});
+
+    </script>
+</body>
+</html>

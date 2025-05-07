@@ -1,0 +1,686 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Financial Goals</title>
+    <style>
+        :root {
+            --primary-color: #0F366D;
+            --secondary-color: #27497C;
+            --text-dark: #3D5C8A;
+            --text-light: #536F99;
+            --border-color: #B2BFD3;
+            --card-bg: #FFFFFF;
+            --section-bg: #FAFAFA;
+            --check-color: #0F366D;
+            --delete-color: #8297B6;
+            --confirm-color: #9AABC5;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --amount-color: #4CAF50;
+            --date-color: #FF9800;
+            --description-color: #666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Times New Roman', serif; /* Change font to Times New Roman */
+}
+
+        body {
+            background-color: var(--section-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app-container {
+            width: 393px;
+            height: 852px;
+            background-color: var(--card-bg);
+            position: relative;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 40px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.2);
+            padding: 60px 24px 80px;
+        }
+        
+        .back-button {
+            width: 30px;
+            height: 30px;
+            background-image: url('Back.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 24px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            transform: scale(1.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .goal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 80px;
+        }
+
+        .goal-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 18px 20px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .goal-item:active {
+            transform: scale(0.98);
+        }
+
+        .goal-content {
+            flex: 1;
+            padding-right: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .goal-title {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.4;
+            margin-bottom: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .goal-title::after {
+            content: '▼';
+            font-size: 12px;
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .goal-item.expanded .goal-title::after {
+            transform: rotate(180deg);
+        }
+
+        .goal-description {
+            font-size: 14px;
+            color: var(--description-color);
+            margin-top: 8px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, margin-top 0.3s ease;
+        }
+
+        .goal-item.expanded .goal-description {
+            max-height: 200px;
+            margin-top: 12px;
+        }
+
+        .goal-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        .goal-amount {
+            color: var(--amount-color);
+            font-weight: 600;
+            background-color: rgba(76, 175, 80, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .goal-date {
+            color: var(--date-color);
+            font-weight: 600;
+            background-color: rgba(255, 152, 0, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .goal-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .check-btn {
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            min-height: 24px;
+            border: 2px solid var(--text-light);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .check-btn.checked {
+            border-color: var(--check-color);
+            background-color: var(--check-color);
+        }
+
+        .check-mark {
+            display: none;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            transform: scale(0.9);
+        }
+
+        .check-btn.checked .check-mark {
+            display: block;
+        }
+
+        .delete-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--delete-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Add Button */
+        .add-button {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            box-shadow: 0 4px 12px rgba(94, 53, 177, 0.3);
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s;
+        }
+
+        .add-button:active {
+            transform: translateX(-50%) scale(0.95);
+            background-color: var(--secondary-color);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 20;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            width: 80%;
+            max-width: 320px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .modal-message {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: bold;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .modal-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cancel-btn {
+            background-color: var(--section-bg);
+            color: var(--text-light);
+            border: none;
+        }
+
+        .confirm-btn {
+            background-color: var(--confirm-color);
+            color: white;
+            border: none;
+        }
+
+        .delete-confirm-btn {
+            background-color: var(--delete-color);
+            color: white;
+            border: none;
+        }
+
+        .add-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .cancel-btn:active {
+            background-color: #e0e0e0;
+        }
+
+        .confirm-btn:active {
+            opacity: 0.9;
+        }
+
+        /* Progress indicator for checked items */
+        .goal-item.checked .goal-title {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .goal-item.checked .goal-amount,
+        .goal-item.checked .goal-date,
+        .goal-item.checked .goal-description {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <button class="back-button" onclick="goBack()">
+            <img src="icons/Back.png" alt="Back" class="back-icon">
+        </button>        
+        <h1 style="font-weight: bold;">Financial Goals</h1>
+        
+        <div class="goal-list" id="goalList"></div>
+        
+        <!-- Floating Add Button -->
+        <div class="add-button" id="addButton">+</div>
+        
+        <!-- Add Goal Modal -->
+        <div class="modal" id="addModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-title">Add New Goal</div>
+                <div class="form-group">
+                    <label class="form-label" for="goalTitle">Goal Title*</label>
+                    <input type="text" class="modal-input" id="goalTitle" placeholder="What do you want to achieve?">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="goalDescription">Description (Optional)</label>
+                    <textarea class="modal-textarea" id="goalDescription" placeholder="Add more details about your goal..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="goalAmount">Amount (₹)*</label>
+                    <input type="number" class="modal-input" id="goalAmount" placeholder="How much do you need?">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="goalDate">Target Date*</label>
+                    <input type="date" class="modal-input" id="goalDate">
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel-btn" id="cancelBtn">Cancel</button>
+                    <button class="modal-btn add-btn" id="confirmAddBtn">Add Goal</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Delete Confirmation Modal -->
+        <div class="modal" id="deleteModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-title">Confirm Delete</div>
+                <div class="modal-message">Are you sure you want to delete this goal?</div>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel-btn" id="cancelDeleteBtn">No</button>
+                    <button class="modal-btn delete-confirm-btn" id="confirmDeleteBtn">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Back button functionality
+        function goBack() {
+            window.location.href = "Home.php"; 
+        }
+
+        // DOM Elements
+        const addButton = document.getElementById('addButton');
+        const addModal = document.getElementById('addModal');
+        const goalTitle = document.getElementById('goalTitle');
+        const goalDescription = document.getElementById('goalDescription');
+        const goalAmount = document.getElementById('goalAmount');
+        const goalDate = document.getElementById('goalDate');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const confirmAddBtn = document.getElementById('confirmAddBtn');
+        const goalList = document.getElementById('goalList');
+        const deleteModal = document.getElementById('deleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        
+        // Variable to store goal to delete
+        let goalToDelete = null;
+        
+        // Set default date to today + 1 month
+        function setDefaultDate() {
+            const today = new Date();
+            const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
+            const formattedDate = nextMonth.toISOString().split('T')[0];
+            goalDate.value = formattedDate;
+        }
+        
+        // Format date for display
+        function formatDisplayDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+        
+        // Format amount with currency
+        function formatAmount(amount) {
+            return '₹' + parseFloat(amount).toLocaleString('en-IN');
+        }
+        
+        // Generate random amount between min and max (in thousands)
+        function generateRandomAmount(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min) * 1000;
+        }
+        
+        // Sample goal data
+        const sampleGoals = [
+            {
+                title: "Emergency Fund",
+                description: "Save for unexpected expenses like medical bills or car repairs",
+                amount: "50000",
+                date: new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0]
+            },
+            {
+                title: "Dream Vacation",
+                description: "Set aside money for a dream vacation to Bali",
+                amount: "150000",
+                date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]
+            },
+            {
+                title: "New Laptop",
+                description: "Save up for the latest MacBook Pro",
+                amount: "120000",
+                date: new Date(new Date().setMonth(new Date().getMonth() + 3)).toISOString().split('T')[0]
+            }
+        ];
+        
+        // Initialize check buttons
+        function initCheckButtons() {
+            document.querySelectorAll('.check-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const goalItem = this.closest('.goal-item');
+                    this.classList.toggle('checked');
+                    goalItem.classList.toggle('checked');
+                    saveGoals();
+                });
+            });
+        }
+        
+        // Initialize delete buttons
+        function initDeleteButtons() {
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    goalToDelete = this.closest('.goal-item');
+                    deleteModal.style.display = 'flex';
+                });
+            });
+        }
+        
+        // Initialize expand/collapse functionality
+        function initExpandableGoals() {
+            document.querySelectorAll('.goal-title').forEach(title => {
+                title.addEventListener('click', function() {
+                    const goalItem = this.closest('.goal-item');
+                    goalItem.classList.toggle('expanded');
+                });
+            });
+        }
+        
+        // Show add modal
+        addButton.addEventListener('click', () => {
+            setDefaultDate();
+            addModal.style.display = 'flex';
+            goalTitle.focus();
+        });
+        
+        // Hide add modal
+        cancelBtn.addEventListener('click', () => {
+            addModal.style.display = 'none';
+            goalTitle.value = '';
+            goalDescription.value = '';
+            goalAmount.value = '';
+            setDefaultDate();
+        });
+        
+        // Add new goal
+        confirmAddBtn.addEventListener('click', () => {
+            const title = goalTitle.value.trim();
+            const description = goalDescription.value.trim();
+            const amount = goalAmount.value.trim();
+            const date = goalDate.value;
+            
+            if (title && amount && date) {
+                addNewGoal(title, description, amount, date);
+                goalTitle.value = '';
+                goalDescription.value = '';
+                goalAmount.value = '';
+                setDefaultDate();
+                addModal.style.display = 'none';
+            } else {
+                alert('Please fill in all required fields (marked with *)');
+            }
+        });
+        
+        // Cancel delete
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteModal.style.display = 'none';
+            goalToDelete = null;
+        });
+        
+        // Confirm delete
+        confirmDeleteBtn.addEventListener('click', () => {
+            if (goalToDelete) {
+                goalToDelete.remove();
+                saveGoals();
+                deleteModal.style.display = 'none';
+                goalToDelete = null;
+            }
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === addModal) {
+                addModal.style.display = 'none';
+                goalTitle.value = '';
+                goalDescription.value = '';
+                goalAmount.value = '';
+                setDefaultDate();
+            }
+            if (e.target === deleteModal) {
+                deleteModal.style.display = 'none';
+                goalToDelete = null;
+            }
+        });
+        
+        // Add new goal function
+        function addNewGoal(title, description, amount, date) {
+            const newGoal = document.createElement('div');
+            newGoal.className = 'goal-item';
+            newGoal.innerHTML = `
+                <div class="goal-content">
+                    <div class="goal-title">${title}</div>
+                    ${description ? `<div class="goal-description">${description}</div>` : ''}
+                    <div class="goal-details">
+                        <span class="goal-amount">${formatAmount(amount)}</span>
+                        <span class="goal-date">${formatDisplayDate(date)}</span>
+                    </div>
+                </div>
+                <div class="goal-actions">
+                    <div class="check-btn">
+                        <div class="check-mark">✓</div>
+                    </div>
+                    <div class="delete-btn">×</div>
+                </div>
+            `;
+            goalList.appendChild(newGoal);
+            
+            // Initialize buttons for new goal
+            initCheckButtons();
+            initDeleteButtons();
+            initExpandableGoals();
+            
+            saveGoals();
+        }
+        
+        // Save goals to localStorage
+        function saveGoals() {
+            const goals = [];
+            document.querySelectorAll('.goal-item').forEach(item => {
+                goals.push({
+                    title: item.querySelector('.goal-title').textContent,
+                    description: item.querySelector('.goal-description')?.textContent || '',
+                    amount: item.querySelector('.goal-amount').textContent.replace('₹', '').replace(/,/g, ''),
+                    date: item.querySelector('.goal-date').textContent,
+                    checked: item.querySelector('.check-btn').classList.contains('checked')
+                });
+            });
+            localStorage.setItem('financialGoals', JSON.stringify(goals));
+        }
+        
+        // Load goals from localStorage
+        function loadGoals() {
+            const savedGoals = localStorage.getItem('financialGoals');
+            if (savedGoals) {
+                const goals = JSON.parse(savedGoals);
+                goalList.innerHTML = '';
+                
+                goals.forEach(goal => {
+                    const newGoal = document.createElement('div');
+                    newGoal.className = `goal-item ${goal.checked ? 'checked' : ''}`;
+                    newGoal.innerHTML = `
+                        <div class="goal-content">
+                            <div class="goal-title">${goal.title}</div>
+                            ${goal.description ? `<div class="goal-description">${goal.description}</div>` : ''}
+                            <div class="goal-details">
+                                <span class="goal-amount">${formatAmount(goal.amount)}</span>
+                                <span class="goal-date">${goal.date}</span>
+                            </div>
+                        </div>
+                        <div class="goal-actions">
+                            <div class="check-btn ${goal.checked ? 'checked' : ''}">
+                                <div class="check-mark">✓</div>
+                            </div>
+                            <div class="delete-btn">×</div>
+                        </div>
+                    `;
+                    goalList.appendChild(newGoal);
+                });
+            } else {
+                // Add sample goals if none exist
+                sampleGoals.forEach(goal => {
+                    addNewGoal(goal.title, goal.description, goal.amount, goal.date);
+                });
+            }
+            
+            // Initialize buttons after loading
+            initCheckButtons();
+            initDeleteButtons();
+            initExpandableGoals();
+        }
+        
+        // Load saved goals on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setDefaultDate();
+            loadGoals();
+        });
+    </script>

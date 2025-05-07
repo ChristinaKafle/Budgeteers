@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=430, initial-scale=1.0">
+    <title>OTP with PHP</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #CBD4E2;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        :root {
+    --blue-shadow: rgba(15, 54, 109, 0.3); /* Soft blue shadow */
+    --blue-inset: rgba(15, 54, 109, 0.2);  /* Inset version */
+    --box-shadow: 5px 5px 7px var(--blue-shadow), -5px -5px 7px var(--blue-shadow);
+    --inset-box-shadow: inset 5px 5px 7px var(--blue-inset), inset -5px -5px 7px var(--blue-inset);
+    --main-bg: #B2BFD3;
+    --font-color: #0F366D;
+}
+
+        ::placeholder {
+            color: var(--font-color);
+        }
+
+        section {
+            width: 430px;
+            height: 932px;
+            background-color: #CBD4E2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            padding: 30px 20px;
+            border-radius: 20px;
+            background-color: var(--main-bg);
+            box-shadow: var(--inset-box-shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h1 {
+            color: var(--font-color);
+            font-size: 2.5rem;
+            text-align: center;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        input {
+            width: 100%;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: .3px;
+            color: var(--font-color);
+            border: none;
+            outline: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background-color: var(--main-bg);
+            box-shadow: var(--box-shadow);
+        }
+
+        input:focus {
+            box-shadow: var(--inset-box-shadow);
+        }
+
+        button {
+            font-weight: bold;
+            color: var(--font-color);
+            background-color: var(--main-bg);
+            border: none;
+            font-size: 1.4rem;
+            transition: all .3s;
+            border-radius: 10px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            padding: 10px;
+            box-shadow: var(--box-shadow);
+        }
+
+        button:active {
+            box-shadow: var(--inset-box-shadow);
+        }
+
+        .email-verify {
+            display: none;
+            gap: 10px;
+            flex-direction: row;
+        }
+
+        .email-verify input {
+            flex: 3;
+        }
+
+        .email-verify #btn-verify-otp {
+            flex: 1;
+        }
+        .logo {
+        width: 100px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        }
+        .back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.back-btn img {
+    width: 30px;
+    height: auto;
+}
+
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container">
+            <img src="icons/Logo.png" alt="Logo" class="logo">
+            <button class="back-btn" onclick="window.location.href='signup.html'">
+                <img src="icons/Back.png" alt="Back" />
+            </button>
+            <h1>Email OTP</h1>
+            <div class="email">
+                <input id="email" type="email" placeholder="Enter Your Email" autocomplete="off">
+            </div>
+            <div class="email-verify" id="otp-section" style="display: none;">
+                <input id="otp-input" type="number" placeholder="Enter Code" autocomplete="off">
+                <button id="btn-verify-otp">Verify</button>
+            </div>
+            <button class="btn-send-otp" onclick="SendOTP()">Send OTP</button>
+        </div>
+    </section>
+
+    <script>
+        function SendOTP() {
+            const email = document.getElementById("email").value;
+
+            if (!email) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Please enter a valid email address!',
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Sending OTP...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch("send_otp.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "email=" + encodeURIComponent(email)
+            })
+            .then(response => response.text())
+            .then(data => {
+                Swal.close();
+                if (data === "OTP sent successfully") {
+                    document.getElementById("otp-section").style.display = "flex";
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'OTP Sent!',
+                        text: 'OTP has been sent to your email.',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to send OTP. Please try again.',
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.close();
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error sending the OTP.',
+                });
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("btn-verify-otp").addEventListener("click", function () {
+                const otp = document.getElementById("otp-input").value;
+
+                if (!otp) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Empty OTP',
+                        text: 'Please enter the OTP you received.',
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Verifying OTP...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                fetch("verify_otp.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: "otp=" + encodeURIComponent(otp)
+                })
+                .then(response => response.text())
+                .then(data => {
+                    Swal.close();
+                    if (data === "OTP verified") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Verified!',
+                            text: 'Your OTP has been verified successfully.',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            window.location.href = 'login.html';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Invalid OTP',
+                            text: 'The OTP you entered is incorrect. Please try again.',
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.close();
+                    console.error("Error verifying OTP:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Something went wrong while verifying the OTP.',
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
