@@ -57,20 +57,32 @@ function getBarData($conn, $username, $interval, $categories) {
 }
 
 function getHistogramData($conn, $username, $interval) {
-    $sql = "SELECT DATE(date) as day, SUM(amount) as total 
-            FROM transactions 
-            WHERE username = ? AND type = 'expense' AND date >= DATE_SUB(CURDATE(), INTERVAL $interval)
-            GROUP BY DATE(date)";
+    // For daily, return only today's data
+    if ($interval === '1 DAY') {
+        $sql = "SELECT DATE(date) as day, SUM(amount) as total 
+                FROM transactions 
+                WHERE username = ? AND type = 'expense' AND DATE(date) = CURDATE()
+                GROUP BY DATE(date)";
+    } else {
+        $sql = "SELECT DATE(date) as day, SUM(amount) as total 
+                FROM transactions 
+                WHERE username = ? AND type = 'expense' AND date >= DATE_SUB(CURDATE(), INTERVAL $interval)
+                GROUP BY DATE(date)";
+    }
+
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
+
     $data = [];
     while ($row = $result->fetch_assoc()) {
         $data[] = $row;
     }
+
     return $data;
 }
+
 
 echo json_encode([
     'daily' => [
@@ -90,3 +102,4 @@ echo json_encode([
     ]
 ]);
 ?>
+
