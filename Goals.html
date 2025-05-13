@@ -448,11 +448,17 @@
         
         // Set default date to today + 1 month
         function setDefaultDate() {
-            const today = new Date();
-            const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
-            const formattedDate = nextMonth.toISOString().split('T')[0];
-            goalDate.value = formattedDate;
-        }
+    const today = new Date();
+    const nextMonth = new Date(today);
+    nextMonth.setMonth(today.getMonth() + 1);
+
+    const formattedToday = today.toISOString().split('T')[0];
+    const formattedNextMonth = nextMonth.toISOString().split('T')[0];
+
+    goalDate.value = formattedNextMonth;
+    goalDate.min = formattedToday;  // This line restricts to today or future only
+}
+
         
         // Format date for display
         function formatDisplayDate(dateString) {
@@ -544,22 +550,32 @@
         
         // Add new goal
         confirmAddBtn.addEventListener('click', () => {
-            const title = goalTitle.value.trim();
-            const description = goalDescription.value.trim();
-            const amount = goalAmount.value.trim();
-            const date = goalDate.value;
-            
-            if (title && amount && date) {
-                addNewGoal(title, description, amount, date);
-                goalTitle.value = '';
-                goalDescription.value = '';
-                goalAmount.value = '';
-                setDefaultDate();
-                addModal.style.display = 'none';
-            } else {
-                alert('Please fill in all required fields (marked with *)');
-            }
-        });
+    const title = goalTitle.value.trim();
+    const description = goalDescription.value.trim();
+    const amount = goalAmount.value.trim();
+    const date = goalDate.value;
+
+    const today = new Date();
+    const selectedDate = new Date(date);
+
+    if (!title || !amount || !date) {
+        alert('Please fill in all required fields (marked with *)');
+        return;
+    }
+
+    if (selectedDate < new Date(today.toDateString())) {
+        alert('Please select a future date.');
+        return;
+    }
+
+    addNewGoal(title, description, amount, date);
+    goalTitle.value = '';
+    goalDescription.value = '';
+    goalAmount.value = '';
+    setDefaultDate();
+    addModal.style.display = 'none';
+});
+
         
         // Cancel delete
         cancelDeleteBtn.addEventListener('click', () => {
